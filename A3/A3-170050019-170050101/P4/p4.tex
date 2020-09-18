@@ -1,0 +1,80 @@
+% !TeX spellcheck = en_GB
+\documentclass[12pt]{article}
+
+%opening
+\title{Assignment 3 : CS215}
+\author{Akshat Chugh : 170050019 \\ Satvik Ambati : 170050101}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage{physics}
+\usepackage{graphicx}
+\graphicspath{./}
+\usepackage[margin=0.5in]{geometry}
+
+
+\begin{document}
+
+\maketitle
+\begin{enumerate}
+	\setcounter{enumi}{3}
+	\item 
+	Assume our data is given by $x_1, x_2, \dots x_n$.
+	
+	Now, for $\hat{\theta}^{ML}$, 
+	$$
+	\text{Likelihood} = \begin{cases}
+		\dfrac{1}{\theta^n}, & \text{if } \forall i,  \theta \geq x_i \\
+		0, & \text{otherwise}
+	\end{cases}$$
+	
+	Therefore, 
+	$$
+	\text{Likelihood} = \begin{cases}
+	\dfrac{1}{\theta^n}, & \text{if } \theta \geq max(x_i) \\
+	0, & \text{otherwise}
+	\end{cases}$$
+	
+	Now, since the non-zero part is decreasing, $\hat{\theta}^{ML}$ = $max(x_i)$. 
+	
+	
+	Now, for $\hat{\theta}^{MAP}$, our prior is,
+	
+	$$
+	P(\theta) \propto \begin{cases}
+	\left(\dfrac{\theta_m}{\theta}\right)^\alpha, & \text{if } \theta \geq \theta_m \\
+	0, & \text{otherwise}
+	\end{cases}$$
+	 
+	Thus, our posterior is,
+	
+	$$
+	P(\theta | x_1, x_2, \dots x_n) \propto \begin{cases}
+	\dfrac{\theta_m^\alpha}{\theta^{n+\alpha}}, & \text{if } \theta \geq max(\theta_m, max(x_i)) \\
+	0, & \text{otherwise}
+	\end{cases}$$
+	
+	Again, to maximise this, we just take $\hat{\theta}^{MAP} = max(\theta_m, max(x_i))$ as the non-zero part of the expression is decreasing.
+	
+	Now, if $\theta_m > \theta_{true}$, $\hat{\theta}^{MAP}$ will always be equal to $\theta_m$, no matter what the sample size. So, it is not necessary that $\hat{\theta}^{MAP}$ will tend to $\hat{\theta}^{ML}$ as $n$ tends to infinity. This is not desirable as we want our estimator to tend to ML estimator.
+	\newpage
+	
+	Now, for $\hat{\theta}^{PM}$,
+	\begin{align}
+		\hat{\theta}^{PM} = E[\theta | Posterior] &= \frac{\displaystyle \int_{\theta_l}^{\infty} \dfrac{\theta_m^\alpha d\theta}{\theta^{n+\alpha-1}} }{\displaystyle \int_{\theta_l}^{\infty} \dfrac{\theta_m^\alpha d\theta}{\theta^{n+\alpha}}} & \text{(where } \theta_l = max(\theta_m, max(x_i)) \text{)}\\ \nonumber \\
+		&= \dfrac{\dfrac{\theta_l^{-(n+\alpha-2)}}{n+\alpha-2}}{\dfrac{\theta_l^{-(n+\alpha-1)}}{n+\alpha-1}} & (\text{as } n + \alpha > 2) \\ \nonumber \\
+		&= \theta_l(\frac{n+\alpha-1}{n+\alpha-2}) 
+	\end{align}
+	
+	Thus, $\hat{\theta}^{PM} = \hat{\theta}^{MAP}(\frac{n+\alpha-1}{n+\alpha-2})$.
+	
+	Now, as $n$ tends to infinity, $\hat{\theta}^{PM}$ tends to $\hat{\theta}^{MAP}$. So it does not always tend to $\hat{\theta}^{ML}$. Thus, similarly, posterior mean estimator is also not desirable. 
+	
+	 
+	
+\end{enumerate}
+
+
+\end{document}

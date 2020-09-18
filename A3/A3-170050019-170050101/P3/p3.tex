@@ -1,0 +1,111 @@
+% !TeX spellcheck = en_GB
+\documentclass[12pt]{article}
+
+%opening
+\title{Assignment 3 : CS215}
+\author{Akshat Chugh : 170050019 \\ Satvik Ambati : 170050101}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage{physics}
+\usepackage{graphicx}
+\graphicspath{./}
+\usepackage[margin=0.5in]{geometry}
+
+
+\begin{document}
+
+\maketitle
+\begin{enumerate}
+	\setcounter{enumi}{2}
+	\item 
+	We know,
+	$$P(x;\mu,C) = \frac{1}{\sqrt{(2\pi)^2 \left|C\right|}} \exp(-0.5(x-\mu)^T C(x-\mu))$$
+	where $x$ is a $2 \times 1$ vector such that $x_{1}^2 + x_{2}^2 = r^2$. 
+	Here $\mu$ and $C$ are the mean and the covariance matrix respectively and $\left|C\right|$ is the determinant of $C$.
+	
+	Therefore, the likelihood function is given by $P(x;\mu,C)$.
+	
+	So, the log likelihood for an individual data-point is, 
+	$$LL = -0.5(x-\mu)^T C(x-\mu) - 0.5 \ln(\left|C\right|) - \ln(2\pi)$$
+	
+	Now, for MLE, 
+	$$\pdv{LL}{C}= \pdv{LL}{\mu}=0 $$
+	
+	Thus, using derivatives calculated online,
+	\begin{align}
+		\pdv{LL}{C} &= \sum_{j=1}^n 0.5 (C^T)^{-1}((x^j-\mu)(x^j-\mu)^T(C^T)^{-1} - I) = O \\
+		\pdv{LL}{\mu} &= \sum_{j=1}^n 0.5(x^j-\mu)^T (C^{-1}+(C^{-1})^T) = O 
+	\end{align} 
+	
+	where $x^j$ is the $j$th data-point, $n$ is the number of data-points.
+	
+	Now, since $C$ is a covariance matrix, $C=C^T$. Thus, by right-multiplying both sides by $C$ in $(2)$, we get 
+	$$\sum_{j=1}^n (x^j-\mu)^T = O$$
+	\begin{equation}
+		\implies \hat{\mu}^{ML} = \frac{\sum_{j=1}^n x^j}{n}
+	\end{equation}
+	
+	Similarly, by left-multiplying by $C$ in $(1)$, we get 
+	\begin{equation}
+		\hat{C}^{ML} = \frac{\sum_{j=1}^n (x^j-\hat{\mu}^{ML})(x^j-\hat{\mu}^{ML})^T}{n}
+	\end{equation}
+	
+	Now, we can take $x = \begin{pmatrix}
+	r \cos\theta \\
+	r \sin\theta
+	\end{pmatrix}$
+	
+	Since we have to consider large n, we can take average of $\cos\theta$ and $\sin\theta$ over $[0,2\pi)$, which is $0$ for both. Thus, $\hat{\mu}^{ML} = O$.
+	
+	Now, for $\hat{C}^{ML}$ , we have to take average of all four entries. This ends up being, 
+	
+	$$\hat{C}^{ML} = r^2 avg_{[0,2\pi)}  \begin{pmatrix}
+	\cos^2\theta & \sin\theta\cos\theta \\
+	\sin\theta\cos\theta & \sin^2\theta
+	\end{pmatrix}$$
+	
+	By integrating to get average, we get,
+	
+	$$\hat{C}^{ML} = r^2 \begin{pmatrix}
+	\frac{1}{2} & 0 \\
+	0 & \frac{1}{2}
+	\end{pmatrix} = \frac{r^2}{2} I_2 $$
+	
+	Now, with these values of $\mu$ and $C$ , the Gaussian is,
+	
+	$$
+		P(x;\mu,C) = \frac{1}{\pi r^2} \exp(-0.5 \begin{pmatrix}
+			x & y
+		\end{pmatrix} \frac{2}{r^2} I_2 \begin{pmatrix}
+			x \\
+			y
+		\end{pmatrix} ) 
+		= \frac{1}{\pi r^2} \exp(-\frac{(x^2+y^2)}{r^2})		
+	$$
+	
+	The mode of this Gaussian clearly lies at the point where $(x^2+y^2)$ is minimum, i.e the origin.
+	
+	Clearly, this Gaussian does not fit the data well, as our data points all lie only on one circle, whereas the Gaussian gives probability for all points as non-zero. Even then, the mode of the Gaussian is not the original circle our points come from. Thus, it is not a good model.
+	
+	
+	Using MATLAB code in the folder, we get, for $n=10000, r=1$, (for one run of the code)
+	
+	$$ \hat{\mu}^{ML} = \begin{pmatrix}
+		-0.0078 \\
+		-0.0028
+	\end{pmatrix}$$
+	
+	$$\hat{C}^{ML} = \begin{pmatrix}
+	0.5004 & -0.0039 \\
+	-0.0039 & 0.4995
+	\end{pmatrix}$$
+	
+	This matches extremely well with our theoretical values.
+	 
+\end{enumerate}
+
+
+\end{document}
